@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{PRESENTATION_TITLE}}</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- React + ReactDOM + Babel (no build step) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Order matters: hooks -> components -> chrome -> app -->
+  <script type="text/babel" src="js/hooks.js?v=2"></script>
+  <script type="text/babel" src="js/components.js?v=2"></script>
+  <script type="text/babel" src="js/chrome.js?v=2"></script>
+  <script type="text/babel" src="js/keyboard.js?v=2"></script>
+  <script src="js/pictures.js?v=2"></script>
+  <script type="text/babel" src="js/app.js?v=2"></script>
+</body>
+</html>

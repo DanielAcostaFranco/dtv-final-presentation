@@ -171,6 +171,7 @@ function AboutSlideshow({ items, photoDuration = 4000, videoDuration = 12000 }) 
   const visiblePair = showB ? bufB : bufA;
 
   useEffect(() => {
+    if (!items || items.length === 0) return;
     const item = items[(visiblePair ?? 0) % items.length];
     const duration = item.type === "video" ? videoDuration : photoDuration;
     const t = setTimeout(() => {
@@ -213,8 +214,12 @@ function AboutSlideshow({ items, photoDuration = 4000, videoDuration = 12000 }) 
 
   return (
     <div className="about-photos">
-      {renderBuffer(bufA, !showB)}
-      {renderBuffer(bufB, showB)}
+      {(!items || items.length === 0)
+        ? <div className="about-photo about-photo--main about-photo--empty">Add your photos in js/pictures.js</div>
+        : <>
+            {renderBuffer(bufA, !showB)}
+            {renderBuffer(bufB, showB)}
+          </>}
     </div>
   );
 }

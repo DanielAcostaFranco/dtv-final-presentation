@@ -7,7 +7,7 @@
   --ink: #1d1d1f;
   --ink-soft: #6e6e73;
   --line: #e3e3e6;
-  --accent: #d6001c;          /* Cummins red */
+  --accent: #d6001c;          /* brand accent color — change to your own */
   --accent-soft: rgba(214, 0, 28, 0.08);
   --radius: 22px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -171,6 +171,16 @@ body {
   pointer-events: none;
   transition: opacity 0.4s var(--ease);
 }
+.site-logo--text {
+  display: flex;
+  align-items: center;
+  height: auto;
+  font-weight: 800;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.site-logo--text.site-logo--dark { color: #f5f5f7; }
 
 /* ============================================================
    NAV DOTS (right side)

@@ -1,7 +1,7 @@
 /* ============================================================
    CHROME: progress bar + nav dots
    ============================================================ */
-const DARK_SECTIONS = new Set(["migration", "foundation", "ai", "lessons", "closing"]);
+const DARK_SECTIONS = new Set(["dark", "closing"]);
 
 function Streaks() {
   /* SVG wavy brush strokes — each path animates stroke-dashoffset to travel across */
@@ -45,11 +45,9 @@ function Logo({ ids }) {
   }, [ids]);
 
   return (
-    <img
-      src={dark ? "assets/logo_white.png" : "assets/250px-Cummins_logo.svg.webp"}
-      alt="Cummins"
-      className="site-logo"
-    />
+    <span className={`site-logo site-logo--text${dark ? " site-logo--dark" : ""}`}>
+      Your Logo
+    </span>
   );
 }
 
@@ -104,12 +102,10 @@ function NavDots({ ids }) {
    PILLAR STEPPER (top-center) — shows which of the 4 pillars
    the current section belongs to. Hidden outside pillar sections.
    ============================================================ */
-const PILLAR_STEPS = ["Migration Streamlit to React", "New Features", "AI Assistant in UI", "Support and Documentation"];
+const PILLAR_STEPS = ["Pillar One", "Pillar Two", "Pillar Three", "Pillar Four"];
 const PILLAR_OF = {
-  before: 0, after: 0, migration: 0, foundation: 0, accomplishments: 0,
-  features: 1,
-  ai: 2,
-  support: 3,
+  // Map a slide id to a pillar index (0-3) to show the top stepper on it.
+  // Left empty in the showcase; add entries when you build pillar slides.
 };
 
 function PillarStepper({ ids }) {

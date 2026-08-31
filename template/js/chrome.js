@@ -45,9 +45,11 @@ function Logo({ ids }) {
   }, [ids]);
 
   return (
-    <span className={`site-logo site-logo--text${dark ? " site-logo--dark" : ""}`}>
-      Your Logo
-    </span>
+    <img
+      src={dark ? "assets/logo_white.png" : "assets/250px-Cummins_logo.svg.webp"}
+      alt="Cummins"
+      className="site-logo"
+    />
   );
 }
 

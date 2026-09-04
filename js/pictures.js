@@ -1,22 +1,18 @@
 /* ============================================================
    PICTURES
-   Keep each strip's media in its own folder under pictures/.
+   Add filenames here — they must live in the pictures/ folder.
    Each entry: { file: "name.jpg", caption: "optional text" }
-   Supports images and videos ({ type: "video" }).
    ============================================================ */
-function createPictureGroup(folder, items) {
-  return items.map(p => ({ ...p, src: `pictures/${folder}/${p.file}` }));
-}
-
-const MEETING_PICTURES = createPictureGroup("meeting", [
-  { file: "cummins_1.jpg", caption: "Pic 1" },
-  { file: "cummins_2.jpg", caption: "Pic 2" },
-  { file: "cummins_3.jpg", caption: "Pic 3" },
-  { file: "cummins_4.jpg", caption: "Pic 4" },
-  { file: "cummins_5.jpg", caption: "Pic 5" },
-]);
-
-// Add another named group when a different strip needs its own folder.
-// const TEAM_PICTURES = createPictureGroup("team", [
-//   { file: "team-1.jpg", caption: "" },
-// ]);
+const PICTURES = [
+  { file: "Image (1).jpg", caption: "" },
+  { file: "Image (2).jpg", caption: "" },
+  { file: "Image (3).jpg", caption: "" },
+  { file: "Image (4).jpg", caption: "", position: "center 5%" },
+  { file: "Image (5).jpg", caption: "" },
+  { file: "Image (6) - Copy.jpg", caption: "" },
+  { file: "DSC_0648 (1).jpg", caption: "" },
+  { file: "2026-189_Machine Rodeo_0167_3840px.jpg", caption: "" },
+  { file: "IMG_0878.JPG", caption: "" },
+  { file: "Picture1.jpg", caption: "" },
+  { file: "IMG_1938.MOV", caption: "", type: "video" },
+];

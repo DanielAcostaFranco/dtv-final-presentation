@@ -64,6 +64,18 @@ function StatCard({ num, label, hint, delay }) {
   );
 }
 
+/* Grid of number stats. Pass data only; the map + stagger live here.
+   items: [{ num, label, hint? }]  — step: ms between each card. */
+function StatGrid({ items, step = 60 }) {
+  return (
+    <div className="stats">
+      {items.map((s, i) => (
+        <StatCard key={i} {...s} delay={i * step} />
+      ))}
+    </div>
+  );
+}
+
 function CompareRow({ metric, before, after, delay }) {
   return (
     <Reveal className="compare__row" delay={delay}>
@@ -71,6 +83,22 @@ function CompareRow({ metric, before, after, delay }) {
       <div className="compare__before">{before}</div>
       <div className="compare__after">{after}</div>
     </Reveal>
+  );
+}
+
+/* Comparison table. Pass data only; the header + row map live here.
+   heads: [col1, col2, col3]  rows: [[metric, before, after], ...]
+   step: ms of stagger between rows. */
+function CompareTable({ heads = ["Aspect", "Before", "Now"], rows, step = 70 }) {
+  return (
+    <div className="compare compare--three">
+      <div className="compare__head">
+        {heads.map((h, i) => <span key={i}>{h}</span>)}
+      </div>
+      {rows.map(([metric, before, after], i) => (
+        <CompareRow key={i} metric={metric} before={before} after={after} delay={i * step} />
+      ))}
+    </div>
   );
 }
 
@@ -229,9 +257,12 @@ function AboutSlideshow({ items, photoDuration = 4000, videoDuration = 12000 }) 
    Infinite auto-scrolling photo strip (CSS animation, no timers).
    Duplicates the list so the loop is seamless.
    ============================================================ */
-function PhotoStrip({ photos, speed = 40 }) {
+function PhotoStrip({ photos = [], speed = 40, placeholderCount = 5 }) {
   /* speed = seconds to traverse one full copy of the strip */
-  const items = [...photos, ...photos]; /* duplicate for seamless loop */
+  const shownPhotos = photos.length
+    ? photos
+    : Array.from({ length: placeholderCount }, (_, i) => ({ caption: `Caption ${i + 1}` }));
+  const items = [...shownPhotos, ...shownPhotos]; /* duplicate for seamless loop */
   return (
     <Reveal className="strip-wrap" delay={160}>
       <div
@@ -246,7 +277,7 @@ function PhotoStrip({ photos, speed = 40 }) {
                 </video>
               : p.src
                 ? <img src={p.src} alt={p.caption || `Photo ${i + 1}`} style={p.position ? { objectPosition: p.position } : undefined} />
-                : <div className="strip-placeholder">Photo {(i % photos.length) + 1}</div>
+                : <div className="strip-placeholder">Photo {(i % shownPhotos.length) + 1}</div>
             }
             {p.caption && <span className="strip-caption">{p.caption}</span>}
           </div>
@@ -336,7 +367,7 @@ function FeatureGrid({ items }) {
    <Reveal as="li"> with a staggered delay (i*80ms).
    left / right: { title, items: [...] }
    ============================================================ */
-function SplitList({ left, right, third, fourth }) {
+function SplitList({ left, right, third, fourth, fifth, sixth, seventh }) {
   const renderCol = (col) => (
     <div className="split-col">
       <h3 className="split-col__title">{col.title}</h3>
@@ -353,6 +384,8 @@ function SplitList({ left, right, third, fourth }) {
       {renderCol(right)}
       {third && renderCol(third)}
       {fourth && renderCol(fourth)}
+      {fifth && renderCol(fifth)}
+      {sixth && renderCol(sixth)}
     </div>
   );
 }

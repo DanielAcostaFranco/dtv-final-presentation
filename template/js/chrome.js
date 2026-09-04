@@ -1,7 +1,6 @@
 /* ============================================================
    CHROME: progress bar + nav dots
    ============================================================ */
-const DARK_SECTIONS = new Set(["dark", "closing"]);
 
 function Streaks() {
   /* SVG wavy brush strokes — each path animates stroke-dashoffset to travel across */
@@ -32,7 +31,8 @@ function Logo({ ids }) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) setDark(DARK_SECTIONS.has(e.target.id));
+          // Drive the logo off the slide's variant: variant="dark" adds `section--dark`.
+          if (e.isIntersecting) setDark(e.target.classList.contains("section--dark"));
         });
       },
       { threshold: 0.5 }
@@ -97,56 +97,6 @@ function NavDots({ ids }) {
         />
       ))}
     </nav>
-  );
-}
-
-/* ============================================================
-   PILLAR STEPPER (top-center) — shows which of the 4 pillars
-   the current section belongs to. Hidden outside pillar sections.
-   ============================================================ */
-const PILLAR_STEPS = ["Pillar One", "Pillar Two", "Pillar Three", "Pillar Four"];
-const PILLAR_OF = {
-  // Map a slide id to a pillar index (0-3) to show the top stepper on it.
-  // Left empty in the showcase; add entries when you build pillar slides.
-};
-
-function PillarStepper({ ids }) {
-  const [current, setCurrent] = useState(null);
-  useEffect(() => {
-    const onScroll = () => {
-      const mid = window.innerHeight / 2;
-      let found = null;
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
-        if (r.top <= mid && r.bottom >= mid) { found = id; break; }
-      }
-      const p = found == null ? null : PILLAR_OF[found];
-      setCurrent(p === undefined ? null : p);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    onScroll();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [ids]);
-
-  const visible = current !== null;
-  return (
-    <div className={`stepper ${visible ? "is-visible" : ""}`} aria-hidden={!visible}>
-      {PILLAR_STEPS.map((label, i) => (
-        <React.Fragment key={i}>
-          {i > 0 && <span className={`stepper__line ${visible && i <= current ? "done" : ""}`} />}
-          <div className={`stepper__step ${current === i ? "active" : ""} ${visible && i < current ? "done" : ""}`}>
-            <span className="stepper__num">{i + 1}</span>
-            <span className="stepper__label">{label}</span>
-          </div>
-        </React.Fragment>
-      ))}
-    </div>
   );
 }
 

@@ -11,16 +11,15 @@
      6. pillars   — light slide with the 4-up PillarGrid
      7. split     — light slide with multi-column SplitList
      8. mock      — light slide with a browser mockup screenshot
-     9. closing   — dark closing slide
+     9. photos    — light slide with an auto-scrolling PhotoStrip
+    10. closing   — dark closing slide
 
-   Copy any <Section> block to build your own deck, and keep
-   SECTION_IDS in sync with the ids you use.
+   Copy any <Section> block to build your own deck. The nav dots,
+   keyboard nav and logo read the section ids straight from the DOM
+   (via useSectionIds), so there's no SECTION_IDS list to keep in sync.
    ============================================================ */
-const SECTION_IDS = [
-  "hero", "text", "cards", "dark", "stats", "pillars", "split", "mock", "closing",
-];
-
 function App() {
+  const SECTION_IDS = useSectionIds();
   useKeyboardNav(SECTION_IDS);
 
   return (
@@ -30,7 +29,7 @@ function App() {
       <Logo ids={SECTION_IDS} />
       <Streaks />
 
-      {/* 1 — HERO (light title slide) */}
+      {/* 1 — HERO (light title slide) — uses: <Section hero> + <Reveal> */}
       <Section id="hero" hero>
         <Reveal delay={80}>
           <h1 className="title">Project Title<br/>Subtitle Goes Here</h1>
@@ -42,7 +41,7 @@ function App() {
         </Reveal>
       </Section>
 
-      {/* 2 — TEXT ONLY (light slide, no cards) */}
+      {/* 2 — TEXT ONLY (light slide, no cards) — uses: <Section> + <Reveal> */}
       <Section id="text" eyebrow="Text slide" title="A slide with just a paragraph">
         <Reveal delay={100}>
           <p className="project-sub">
@@ -58,7 +57,7 @@ function App() {
         </Reveal>
       </Section>
 
-      {/* 3 — CARDS (light slide with a grid of cards) */}
+      {/* 3 — CARDS (light slide with a grid of cards) — uses: <FeatureGrid> (-> <FeatureCard>) */}
       <Section id="cards" variant="alt" eyebrow="Cards slide" title="A grid of feature cards">
         <FeatureGrid items={[
           { icon: "🗺️", title: "Card One",
@@ -76,34 +75,31 @@ function App() {
         ]} />
       </Section>
 
-      {/* 4 — DARK (dark slide with a comparison table) */}
+      {/* 4 — DARK (dark slide with a comparison table) — uses: <CompareTable> */}
       <Section id="dark" variant="dark" eyebrow="Dark slide" title="A dark slide with a table">
         <p className="lead">Dark background, great for before/after comparisons.</p>
-        <div className="compare compare--three">
-          <div className="compare__head">
-            <span>Aspect</span><span>Before</span><span>Now</span>
-          </div>
-          {[
+        <CompareTable
+          heads={["Aspect", "Before", "Now"]}
+          rows={[
             ["Aspect one", "Old approach", "New approach"],
             ["Aspect two", "Old approach", "New approach"],
             ["Aspect three", "Old approach", "New approach"],
-          ].map(([metric, before, after], i) => (
-            <CompareRow key={i} metric={metric} before={before} after={after} delay={i * 70} />
-          ))}
-        </div>
+            ["Aspect four", "Old approach", "New approach"],
+          ]}
+        />
       </Section>
 
-      {/* 5 — STATS (light slide with number stats) */}
+      {/* 5 — STATS (light slide with number stats) — uses: <StatGrid> */}
       <Section id="stats" variant="alt" eyebrow="Stats slide" title="Big numbers">
-        <div className="stats">
-          <StatCard num="00" label="Metric one" hint="Optional hint text." delay={0} />
-          <StatCard num="00" label="Metric two" hint="Optional hint text." delay={60} />
-          <StatCard num="~00k" label="Metric three" delay={120} />
-          <StatCard num="~000" label="Metric four" delay={180} />
-        </div>
+        <StatGrid items={[
+          { num: "00", label: "Metric one", hint: "Optional hint text." },
+          { num: "00", label: "Metric two", hint: "Optional hint text." },
+          { num: "~00k", label: "Metric three" },
+          { num: "~000", label: "Metric four" },
+        ]} />
       </Section>
 
-      {/* 6 — PILLARS (light slide with a 4-up grid) */}
+      {/* 6 — PILLARS (light slide with a 4-up grid) — uses: <PillarGrid> */}
       <Section id="pillars" eyebrow="Pillars slide" title="Four-up pillar grid">
         <PillarGrid pillars={[
           { icon: "🔄", title: "Pillar One", desc: "Short description." },
@@ -113,32 +109,40 @@ function App() {
         ]} />
       </Section>
 
-      {/* 7 — SPLIT (light slide with multi-column lists) */}
+      {/* 7 — SPLIT (light slide with multi-column lists) — uses: <SplitList> */}
       <Section id="split" variant="alt" eyebrow="Split slide" title="Multi-column lists">
         <SplitList
           left={{ title: "Column One", items: ["List item", "List item", "List item"] }}
           right={{ title: "Column Two", items: ["List item", "List item", "List item"] }}
           third={{ title: "Column Three", items: ["List item", "List item"] }}
           fourth={{ title: "Column Four", items: ["List item", "List item", "List item"] }}
+          fifth={{ title: "Column Five", items: ["List item", "List item", "List item"] }}
+          sixth={{ title: "Column Six", items: ["List item", "List item", "List item"] }}
+          seventh={{ title: "Column Seven", items: ["List item", "List item", "List item"] }}
         />
       </Section>
 
-      {/* 8 — MOCK (light slide with a browser mockup) */}
+      {/* 8 — MOCK (light slide with a browser mockup) — uses: <MockBrowser> */}
       <Section id="mock" variant="alt" eyebrow="Screenshot slide" title="Browser mockup">
         <div className="before-split">
           <ul className="before-words">
-            <Reveal as="li" delay={0}>Fast</Reveal>
-            <Reveal as="li" delay={120}>Modern</Reveal>
-            <Reveal as="li" delay={240}>Reliable</Reveal>
+            {["Fast", "Modern", "Reliable"].map((w, i) => (
+              <Reveal as="li" key={i} delay={i * 120}>{w}</Reveal>
+            ))}
           </ul>
-          <MockBrowser url="app.example.com">
+          <MockBrowser url="https://www.cummins.com/">
             {/* Replace with your image: <img src="assets/screenshot.png" alt="UI" /> */}
             <span>Your screenshot here</span>
           </MockBrowser>
         </div>
       </Section>
 
-      {/* 9 — CLOSING (dark closing slide) */}
+      {/* 9 — PHOTOS (light slide, auto-scrolling strip) — uses: <PhotoStrip> */}
+      <Section id="photos" eyebrow="Photos slide" title="An auto-scrolling photo strip">
+        <PhotoStrip photos={MEETING_PICTURES} />
+      </Section>
+
+      {/* 10 — CLOSING (dark closing slide) — uses: <Section closing> + <Reveal> */}
       <Section id="closing" closing variant="dark">
         <Reveal><p className="eyebrow">Closing slide</p></Reveal>
         <Reveal delay={180}>
